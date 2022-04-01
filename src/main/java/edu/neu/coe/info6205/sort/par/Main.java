@@ -22,8 +22,20 @@ public class Main {
         Random random = new Random();
         int[] array = new int[2000000];
         ArrayList<Long> timeList = new ArrayList<>();
-        for (int j = 50; j < 100; j++) {
-            ParSort.cutoff = 10000 * (j + 1);
+
+
+        for( int k = 1; k <= 32; k = k*2) {
+            ParSort.threadCount = k;
+            ParSort.threadFJP = new ForkJoinPool(ParSort.threadCount);
+            String seriesName = "" + k + " Threads";
+//            XYSeries timeSeries = new XYSeries(seriesName);
+            double min = 99999;
+            int minCutoff = 0;
+            double avg = 0;
+
+
+        for (int j = 20; j <= 640; j=j*2) {
+            ParSort.cutoff = 2500 * (j);
             // for (int i = 0; i < array.length; i++) array[i] = random.nextInt(10000000);
             long time;
             long startTime = System.currentTimeMillis();
@@ -33,10 +45,18 @@ public class Main {
             }
             long endTime = System.currentTimeMillis();
             time = (endTime - startTime);
+            avg += time/10;
+            if(time/10 < min){
+                minCutoff = 10000 * (j + 1);
+                min = time/10;
+            }
             timeList.add(time);
 
 
             System.out.println("cutoff：" + (ParSort.cutoff) + "\t\t10times Time:" + time + "ms");
+
+        }
+            System.out.println("For threads " + k + " min is = " + min + " at cutoff " + minCutoff + "ms and average is = " + avg/50+"ms");
 
         }
         try {

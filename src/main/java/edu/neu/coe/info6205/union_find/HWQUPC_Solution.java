@@ -39,6 +39,7 @@ public class HWQUPC_Solution {
 
 
     public static void main(String[] args) {
+
         int n = 102400;
         int trials = 1000;
         int[] edges = new int[trials];
